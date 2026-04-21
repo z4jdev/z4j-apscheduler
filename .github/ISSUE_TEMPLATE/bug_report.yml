@@ -1,0 +1,84 @@
+name: Bug report
+description: Report a problem with z4j-apscheduler
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug.
+
+        **Security bugs do NOT belong here.** If you believe you've found
+        a security issue, please email `security@z4j.com` - see
+        [SECURITY.md](../blob/main/SECURITY.md).
+
+  - type: input
+    id: z4j-apscheduler-version
+    attributes:
+      label: z4j-apscheduler version
+      description: Output of `pip show z4j-apscheduler | grep -E 'Name|Version'`
+      placeholder: z4j-apscheduler 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: apscheduler-version
+    attributes:
+      label: APScheduler version
+      placeholder: APScheduler 3.10.4
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      placeholder: 3.14.4
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scheduler-type
+    attributes:
+      label: APScheduler type
+      options:
+        - BackgroundScheduler
+        - AsyncIOScheduler
+        - BlockingScheduler
+        - Other / custom
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: A standalone script is ideal.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the full traceback if applicable.
+      render: shell
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: This is NOT a security issue (those go to security@z4j.com)
+          required: true
