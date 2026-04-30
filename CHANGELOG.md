@@ -1,40 +1,33 @@
 # Changelog
 
-All notable changes to `z4j-apscheduler` are documented in this file.
+All notable changes to this package are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.0] - 2026-05-15
 
-## [1.0.1] - 2026-04-21
+**Aligned with the z4j 1.3.0 ecosystem reset.**
+
+z4j 1.3.0 is a clean-slate reset of the 1.x ecosystem. All prior
+1.x versions on PyPI (1.0.x, 1.1.x, 1.2.x) are yanked — they
+remain installable by exact pin but `pip install` no longer
+selects them.
 
 ### Changed
 
-- Lowered minimum Python version from 3.13 to 3.11. This package now supports Python 3.11, 3.12, 3.13, and 3.14.
-- Documentation polish: standardized on ASCII hyphens across README, CHANGELOG, and docstrings for consistent rendering on PyPI.
+- Bumped to 1.3.0 to match the rest of the z4j wave.
+- `z4j-core` and `z4j-bare` dependency floors bumped to `>=1.3.0,<2`.
 
+### Compatibility
 
-## [1.0.0] - 2026-04
+- Compatible with `z4j-core>=1.3.0,<2` and `z4j-bare>=1.3.0,<2`.
+- The engine integration surface (Celery / RQ / arq / dramatiq /
+  huey / taskiq / apscheduler / scheduler) is unchanged from
+  1.2.x — adapter callers don't need code changes.
 
-### Added
+### See also
 
-- First public release.
-- `APSchedulerAdapter` implementing `z4j_core.protocols.SchedulerAdapter` against any `apscheduler.BaseScheduler` (`BackgroundScheduler`, `AsyncIOScheduler`, `BlockingScheduler`).
-- Read-side capabilities: `list` (walks `scheduler.get_jobs()`), `read`.
-- Lifecycle capabilities: `enable` (`resume_job`), `disable` (`pause_job`), `trigger_now` (`modify_job(next_run_time=now)`), `delete` (`remove_job`).
-- Engine-agnostic by design - pairs with Dramatiq, RQ, Celery, bare callables, or any custom executor.
-- `capabilities.py` declares the supported action set so the dashboard renders only valid buttons.
+- `CHANGELOG-1.x-legacy.md` for the 1.0/1.1/1.2 release history.
 
-### Deferred
-
-- `create` / `update` capabilities - APScheduler's job-spec API requires more design work to expose safely from a remote dashboard. Tracked for v1.1.
-
-## Links
-
-- Repository: <https://github.com/z4jdev/z4j-apscheduler>
-- Issues: <https://github.com/z4jdev/z4j-apscheduler/issues>
-- PyPI: <https://pypi.org/project/z4j-apscheduler/>
-
-[Unreleased]: https://github.com/z4jdev/z4j-apscheduler/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/z4jdev/z4j-apscheduler/releases/tag/v1.0.0
+## [Unreleased]
