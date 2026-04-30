@@ -6,7 +6,7 @@
 
 The APScheduler adapter for [z4j](https://z4j.com).
 
-Surfaces APScheduler jobs on the dashboard's Schedules page — read,
+Surfaces APScheduler jobs on the dashboard's Schedules page, read,
 create, update, enable, disable, trigger, delete. Engine-agnostic:
 works alongside any z4j engine adapter, or as a standalone
 scheduler in projects without a queue engine.
@@ -64,7 +64,7 @@ Full docs at [z4j.dev/schedulers/apscheduler/](https://z4j.dev/schedulers/apsche
 
 ## License
 
-Apache-2.0 — see [LICENSE](LICENSE).
+Apache-2.0, see [LICENSE](LICENSE).
 
 ## Links
 
