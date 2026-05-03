@@ -1,8 +1,8 @@
 # z4j-apscheduler
 
-[![PyPI version](https://img.shields.io/pypi/v/z4j-apscheduler.svg)](https://pypi.org/project/z4j-apscheduler/)
-[![Python](https://img.shields.io/pypi/pyversions/z4j-apscheduler.svg)](https://pypi.org/project/z4j-apscheduler/)
-[![License](https://img.shields.io/pypi/l/z4j-apscheduler.svg)](https://github.com/z4jdev/z4j-apscheduler/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/z4j-apscheduler.svg?v=1.4.0)](https://pypi.org/project/z4j-apscheduler/)
+[![Python](https://img.shields.io/pypi/pyversions/z4j-apscheduler.svg?v=1.4.0)](https://pypi.org/project/z4j-apscheduler/)
+[![License](https://img.shields.io/pypi/l/z4j-apscheduler.svg?v=1.4.0)](https://github.com/z4jdev/z4j-apscheduler/blob/main/LICENSE)
 
 The APScheduler adapter for [z4j](https://z4j.com).
 
