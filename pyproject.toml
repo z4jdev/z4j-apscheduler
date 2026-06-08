@@ -1,9 +1,9 @@
 [project]
 name = "z4j-apscheduler"
-version = "1.6.0"
+version = "1.6.7"
 description = "z4j scheduler adapter for APScheduler (Apache 2.0)"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 authors = [{ name = "z4j contributors" }]
 keywords = ["z4j", "apscheduler", "scheduler", "cron", "dramatiq"]
@@ -13,6 +13,7 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -22,7 +23,15 @@ classifiers = [
 ]
 dependencies = [
     "z4j-core>=1.4.0,<2",
-    "apscheduler>=3.11.2",
+    # APScheduler compatibility policy: operator-chosen primary,
+    # wide range. We touch only get_jobs / remove_job / pause_job /
+    # resume_job / JobLookupError - all stable since 3.6. 3.8 is the
+    # practical floor (cleaner pytz vs zoneinfo handling that the
+    # schedule projections depend on); the previous >=3.11.2 floor
+    # excluded the dominant 3.10.x deployed population for no
+    # functional reason. ``<4`` guards APScheduler 4.x (currently
+    # alpha with substantial API rework) from breaking the adapter.
+    "apscheduler>=3.8,<4",
 ]
 
 [project.urls]
