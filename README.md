@@ -1,20 +1,20 @@
 # z4j-apscheduler
 
-[![PyPI version](https://img.shields.io/pypi/v/z4j-apscheduler.svg?v=1.6.7)](https://pypi.org/project/z4j-apscheduler/)
-[![Python](https://img.shields.io/pypi/pyversions/z4j-apscheduler.svg?v=1.6.7)](https://pypi.org/project/z4j-apscheduler/)
-[![License](https://img.shields.io/pypi/l/z4j-apscheduler.svg?v=1.6.7)](https://github.com/z4jdev/z4j-apscheduler/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/z4j-apscheduler.svg?v=1.7.0)](https://pypi.org/project/z4j-apscheduler/)
+[![Python](https://img.shields.io/pypi/pyversions/z4j-apscheduler.svg?v=1.7.0)](https://pypi.org/project/z4j-apscheduler/)
+[![License](https://img.shields.io/pypi/l/z4j-apscheduler.svg?v=1.7.0)](https://github.com/z4jdev/z4j-apscheduler/blob/main/LICENSE)
 
 The APScheduler adapter for [z4j](https://z4j.com).
 
 Surfaces APScheduler jobs on the dashboard's Schedules page, read,
-create, update, enable, disable, trigger, delete. Engine-agnostic:
+enable, disable, trigger, delete. Engine-agnostic:
 works alongside any z4j engine adapter, or as a standalone
 scheduler in projects without a queue engine.
 
 ## Compatibility
 
 - APScheduler 3.8+ and <4 (capped below the APScheduler 4.x rewrite)
-- Python 3.10+
+- Python 3.11+
 
 Full per-adapter matrix at <https://z4j.dev/reference/compatibility/>.
 
@@ -23,12 +23,14 @@ Full per-adapter matrix at <https://z4j.dev/reference/compatibility/>.
 | Capability | Notes |
 |---|---|
 | List schedules | every job APScheduler currently tracks |
-| Create schedule | date / interval / cron triggers |
-| Update | trigger spec, args, kwargs, paused flag |
 | Enable / disable | via APScheduler's pause / resume |
 | Trigger now | runs the job immediately, outside the schedule |
 | Delete | clean removal from the jobstore |
 | Boot inventory | full snapshot at agent connect; existing jobs show up without editing |
+
+Create and update are not yet supported: the adapter surfaces and
+controls the jobs you define in your own APScheduler setup, and the
+brain greys out create / update for this scheduler.
 
 Supports every APScheduler jobstore: in-memory, SQLAlchemy
 (Postgres / SQLite / MySQL), MongoDB, Redis.

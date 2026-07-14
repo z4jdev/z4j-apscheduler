@@ -12,6 +12,7 @@ deferred to v1.1 same as the rq-scheduler adapter.
 
 from __future__ import annotations
 
+import contextlib
 import logging
 from datetime import UTC, datetime
 from typing import Any
@@ -65,7 +66,7 @@ class APSchedulerAdapter:
     # change signals into the brain.
     # ------------------------------------------------------------------
 
-    def connect_signals(self, sink: Any) -> None:  # noqa: ARG002
+    def connect_signals(self, sink: Any) -> None:
         return
 
     def disconnect_signals(self) -> None:
@@ -78,14 +79,14 @@ class APSchedulerAdapter:
     async def list_schedules(self) -> list[Schedule]:
         try:
             jobs = list(self.scheduler.get_jobs())
-        except Exception:  # noqa: BLE001
+        except Exception:
             logger.exception("z4j apscheduler: get_jobs failed")
             return []
         out: list[Schedule] = []
         for job in jobs:
             try:
                 out.append(self._to_schedule(job))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 logger.exception(
                     "z4j apscheduler: failed to map job %r",
                     getattr(job, "id", "?"),
@@ -95,26 +96,28 @@ class APSchedulerAdapter:
     async def get_schedule(self, schedule_id: str) -> Schedule | None:
         try:
             job = self.scheduler.get_job(schedule_id)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return None
         if job is None:
             return None
         try:
             return self._to_schedule(job)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return None
 
     # ------------------------------------------------------------------
     # Write
     # ------------------------------------------------------------------
 
-    async def create_schedule(self, spec: Schedule) -> Schedule:  # noqa: ARG002
+    async def create_schedule(self, spec: Schedule) -> Schedule:
         raise NotImplementedError(
             "create_schedule is deferred to v1.1 for APScheduler.",
         )
 
     async def update_schedule(
-        self, schedule_id: str, spec: Schedule,  # noqa: ARG002
+        self,
+        schedule_id: str,
+        spec: Schedule,
     ) -> Schedule:
         raise NotImplementedError(
             "update_schedule is deferred to v1.1 for APScheduler.",
@@ -129,9 +132,10 @@ class APSchedulerAdapter:
                 status="success",
                 result={"schedule_id": schedule_id, "noop": True},
             )
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return CommandResult(
-                status="failed", error=f"remove_job failed: {exc}",
+                status="failed",
+                error=f"remove_job failed: {exc}",
             )
         return CommandResult(
             status="success",
@@ -146,7 +150,7 @@ class APSchedulerAdapter:
                 status="failed",
                 error=f"schedule {schedule_id!r} not found",
             )
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return CommandResult(status="failed", error=f"resume_job failed: {exc}")
         return CommandResult(
             status="success",
@@ -161,7 +165,7 @@ class APSchedulerAdapter:
                 status="failed",
                 error=f"schedule {schedule_id!r} not found",
             )
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return CommandResult(status="failed", error=f"pause_job failed: {exc}")
         return CommandResult(
             status="success",
@@ -170,17 +174,16 @@ class APSchedulerAdapter:
 
     async def trigger_now(self, schedule_id: str) -> CommandResult:
         job = None
-        try:
+        with contextlib.suppress(Exception):
             job = self.scheduler.get_job(schedule_id)
-        except Exception:  # noqa: BLE001
-            pass
         if job is None:
             raise NotFoundError(f"schedule {schedule_id!r} not found")
         try:
             self.scheduler.modify_job(
-                schedule_id, next_run_time=datetime.now(UTC),
+                schedule_id,
+                next_run_time=datetime.now(UTC),
             )
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return CommandResult(status="failed", error=f"modify_job failed: {exc}")
         return CommandResult(
             status="success",
@@ -235,7 +238,8 @@ class APSchedulerAdapter:
             is_enabled=is_enabled,
             next_run_at=(
                 getattr(job, "next_run_time", None)
-                if isinstance(getattr(job, "next_run_time", None), datetime) else None
+                if isinstance(getattr(job, "next_run_time", None), datetime)
+                else None
             ),
             total_runs=0,
             external_id=job_id,
@@ -266,9 +270,10 @@ def _missing_job_exception() -> tuple[type[BaseException], ...]:
         # ``except`` clause is skipped and we land in the generic
         # Exception handler (which maps to the adapter's
         # "not found" / "failed" semantics depending on the caller).
-        class _Unused(Exception):
+        class _UnusedError(Exception):
             pass
-        return (_Unused,)
+
+        return (_UnusedError,)
     return (JobLookupError,)
 
 
@@ -277,15 +282,16 @@ def _safe_str(value: Any) -> str:
         return ""
     try:
         return str(value)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return ""
 
 
 def _safe_uuid(value: str) -> UUID:
     try:
         return UUID(value)
-    except Exception:  # noqa: BLE001
+    except Exception:
         import uuid as _uuid
+
         return _uuid.uuid5(_uuid.NAMESPACE_OID, value)
 
 

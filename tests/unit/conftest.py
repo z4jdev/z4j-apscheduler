@@ -86,11 +86,17 @@ class FakeAPScheduler:
 def scheduler() -> FakeAPScheduler:
     s = FakeAPScheduler()
     s.register(
-        FakeJob(id="job-cron-1", trigger=CronTrigger("0 3 * * *"),
-                next_run_time=datetime(2026, 4, 16, 3)),
+        FakeJob(
+            id="job-cron-1",
+            trigger=CronTrigger("0 3 * * *"),
+            next_run_time=datetime(2026, 4, 16, 3),
+        ),
     )
     s.register(
-        FakeJob(id="job-interval-1", trigger=IntervalTrigger(60),
-                next_run_time=datetime(2026, 4, 15, 21)),
+        FakeJob(
+            id="job-interval-1",
+            trigger=IntervalTrigger(60),
+            next_run_time=datetime(2026, 4, 15, 21),
+        ),
     )
     return s

@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import pytest
-
-from z4j_core.models import ScheduleKind
-from z4j_core.protocols import SchedulerAdapter
-
 from z4j_apscheduler import APSchedulerAdapter
 from z4j_apscheduler.capabilities import DEFAULT_CAPABILITIES
+from z4j_core.models import ScheduleKind
+from z4j_core.protocols import SchedulerAdapter
 
 
 class TestProtocolConformance:
@@ -23,8 +21,11 @@ class TestProtocolConformance:
 
 class TestCapabilities:
     def test_frozen_set(self):
-        assert DEFAULT_CAPABILITIES == frozenset(
-            {"list", "enable", "disable", "trigger_now", "delete"},
+        assert (
+            frozenset(
+                {"list", "enable", "disable", "trigger_now", "delete"},
+            )
+            == DEFAULT_CAPABILITIES
         )
 
 
@@ -116,6 +117,7 @@ class TestTriggerNow:
     @pytest.mark.asyncio
     async def test_missing_id_raises_notfound(self, scheduler):
         from z4j_core.errors import NotFoundError
+
         adapter = APSchedulerAdapter(scheduler=scheduler)
         with pytest.raises(NotFoundError):
             await adapter.trigger_now("ghost")
