@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.0 (2026-08-25)
+
+* Correct the APScheduler dependency floor to 3.10.2. Earlier releases require the removed `pkg_resources` module at import time.
+
 ## 1.8.0 (2026-07-23)
 
 * `trigger_now` offloads its jobstore I/O off the agent loop so a jobstore incident can no longer freeze it; a timed-out mutation is reported indeterminate.

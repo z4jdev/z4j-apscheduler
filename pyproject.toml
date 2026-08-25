@@ -1,6 +1,6 @@
 [project]
 name = "z4j-apscheduler"
-version = "1.8.0"
+version = "1.9.0"
 description = "z4j scheduler adapter for APScheduler (Apache 2.0)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,16 +21,12 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "z4j-core>=1.8.0,<2",
-    # APScheduler compatibility policy: operator-chosen primary,
-    # wide range. We touch only get_jobs / remove_job / pause_job /
-    # resume_job / JobLookupError - all stable since 3.6. 3.8 is the
-    # practical floor (cleaner pytz vs zoneinfo handling that the
-    # schedule projections depend on); the previous >=3.11.2 floor
-    # excluded the dominant 3.10.x deployed population for no
-    # functional reason. ``<4`` guards APScheduler 4.x (currently
-    # alpha with substantial API rework) from breaking the adapter.
-    "apscheduler>=3.8,<4",
+    "z4j-core>=1.9.0,<2",
+    # APScheduler 3.10.1 and earlier import pkg_resources, which is not
+    # present in the supported runtime closure. APScheduler 3.10.2 is the
+    # first measured floor: a real lifecycle path and the adapter suite
+    # pass there. ``<4`` guards the APScheduler 4.x API rewrite.
+    "apscheduler>=3.10.2,<4",
 ]
 
 [project.urls]
@@ -41,7 +37,7 @@ Issues = "https://github.com/z4jdev/z4j-apscheduler/issues"
 Source = "https://github.com/z4jdev/z4j-apscheduler"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.32.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]

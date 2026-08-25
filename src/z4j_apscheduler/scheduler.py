@@ -6,8 +6,8 @@ HTTP calls. The adapter therefore doesn't advertise a specific
 ``engine`` - it uses whatever the job's ``kwargs`` / metadata
 imply (or "apscheduler" as a neutral placeholder).
 
-v1 surface: read + enable/disable/trigger/delete. Create/update
-deferred to v1.1 same as the rq-scheduler adapter.
+The adapter supports read, enable, disable, trigger, and delete. It does not
+advertise create or update.
 """
 
 from __future__ import annotations
@@ -243,7 +243,7 @@ class APSchedulerAdapter:
 
     async def create_schedule(self, spec: Schedule) -> Schedule:
         raise NotImplementedError(
-            "create_schedule is deferred to v1.1 for APScheduler.",
+            "create_schedule is not supported by the APScheduler adapter.",
         )
 
     async def update_schedule(
@@ -252,7 +252,7 @@ class APSchedulerAdapter:
         spec: Schedule,
     ) -> Schedule:
         raise NotImplementedError(
-            "update_schedule is deferred to v1.1 for APScheduler.",
+            "update_schedule is not supported by the APScheduler adapter.",
         )
 
     async def delete_schedule(self, schedule_id: str) -> CommandResult:

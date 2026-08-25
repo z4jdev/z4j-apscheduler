@@ -1,8 +1,8 @@
 # z4j-apscheduler
 
-[![PyPI version](https://img.shields.io/pypi/v/z4j-apscheduler.svg?v=1.8.0)](https://pypi.org/project/z4j-apscheduler/)
-[![Python](https://img.shields.io/pypi/pyversions/z4j-apscheduler.svg?v=1.8.0)](https://pypi.org/project/z4j-apscheduler/)
-[![License](https://img.shields.io/pypi/l/z4j-apscheduler.svg?v=1.8.0)](https://github.com/z4jdev/z4j-apscheduler/blob/main/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/z4j-apscheduler.svg)](https://pypi.org/project/z4j-apscheduler/)
+[![Python](https://img.shields.io/pypi/pyversions/z4j-apscheduler.svg)](https://pypi.org/project/z4j-apscheduler/)
+[![License](https://img.shields.io/pypi/l/z4j-apscheduler.svg)](https://github.com/z4jdev/z4j-apscheduler/blob/main/LICENSE)
 
 The APScheduler adapter for [z4j](https://z4j.com).
 
@@ -13,7 +13,7 @@ scheduler in projects without a queue engine.
 
 ## Compatibility
 
-- APScheduler 3.8+ and <4 (capped below the APScheduler 4.x rewrite)
+- APScheduler 3.10.2+ and <4 (capped below the APScheduler 4.x rewrite)
 - Python 3.11+
 
 Full per-adapter matrix at <https://z4j.dev/reference/compatibility/>.
@@ -24,7 +24,7 @@ Full per-adapter matrix at <https://z4j.dev/reference/compatibility/>.
 |---|---|
 | List schedules | every job APScheduler currently tracks |
 | Enable / disable | via APScheduler's pause / resume |
-| Trigger now | runs the job immediately, outside the schedule |
+| Trigger now | sets the existing job's `next_run_time` to now; subsequent timing follows APScheduler's normal trigger semantics |
 | Delete | clean removal from the jobstore |
 | Boot inventory | full snapshot at agent connect; existing jobs show up without editing |
 
@@ -38,10 +38,12 @@ Supports every APScheduler jobstore: in-memory, SQLAlchemy
 ## Install
 
 ```bash
-pip install z4j-apscheduler
+pip install z4j-bare z4j-apscheduler
 ```
 
 ```python
+import os
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from z4j_bare import install_agent
@@ -57,15 +59,17 @@ install_agent(
     brain_url="https://brain.example.com",
     token="z4j_agent_...",
     project_id="my-project",
+    hmac_secret=os.environ["Z4J_HMAC_SECRET"],
 )
 ```
 
 ## Reliability
 
-- No exception from the adapter ever propagates back into APScheduler
-  or your job code.
-- Jobstore writes use APScheduler's normal transactional semantics; the
-  adapter only observes and surfaces, it does not rewrite the store.
+- Inventory and listener failures are isolated from APScheduler job code.
+- Operator controls call APScheduler's normal pause, resume, remove, and
+  `modify_job` APIs and therefore mutate the configured jobstore. A control
+  that exceeds its 10-second timeout is reported as indeterminate because its
+  worker thread may still complete the mutation.
 
 ## Documentation
 
