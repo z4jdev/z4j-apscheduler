@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.1 (2026-08-26)
+
+* Carried with the coordinated fleet release. No adapter behaviour changed.
+
 ## 1.9.0 (2026-08-25)
 
 * Correct the APScheduler dependency floor to 3.10.2. Earlier releases require the removed `pkg_resources` module at import time.
