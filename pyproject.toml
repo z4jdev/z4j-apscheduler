@@ -1,6 +1,6 @@
 [project]
 name = "z4j-apscheduler"
-version = "1.11.0"
+version = "1.12.0"
 description = "z4j scheduler adapter for APScheduler (Apache 2.0)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,7 +21,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "z4j-core>=1.11.0,<2",
+    "z4j-core>=1.12.0,<2",
     # APScheduler 3.10.1 and earlier import pkg_resources, which is not
     # present in the supported runtime closure. APScheduler 3.10.2 is the
     # first measured floor: a real lifecycle path and the adapter suite
@@ -31,7 +31,7 @@ dependencies = [
 
 [project.urls]
 Changelog = "https://github.com/z4jdev/z4j-apscheduler/blob/main/CHANGELOG.md"
-Documentation = "https://z4j.dev"
+Documentation = "https://docs.z4j.com"
 Homepage = "https://z4j.com"
 Issues = "https://github.com/z4jdev/z4j-apscheduler/issues"
 Source = "https://github.com/z4jdev/z4j-apscheduler"

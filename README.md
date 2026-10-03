@@ -16,7 +16,7 @@ scheduler in projects without a queue engine.
 - APScheduler 3.10.2+ and <4 (capped below the APScheduler 4.x rewrite)
 - Python 3.11+
 
-Full per-adapter matrix at <https://z4j.dev/reference/compatibility/>.
+Full per-adapter matrix at <https://docs.z4j.com/reference/compatibility/>.
 
 ## What it ships
 
@@ -73,7 +73,7 @@ install_agent(
 
 ## Documentation
 
-Full docs at [z4j.dev/schedulers/apscheduler/](https://z4j.dev/schedulers/apscheduler/).
+Full docs at [docs.z4j.com/schedulers/apscheduler/](https://docs.z4j.com/schedulers/apscheduler/).
 
 ## License
 
@@ -82,7 +82,7 @@ Apache-2.0, see [LICENSE](LICENSE).
 ## Links
 
 - Homepage: https://z4j.com
-- Documentation: https://z4j.dev
+- Documentation: https://docs.z4j.com
 - PyPI: https://pypi.org/project/z4j-apscheduler/
 - Issues: https://github.com/z4jdev/z4j-apscheduler/issues
 - Changelog: [CHANGELOG.md](CHANGELOG.md)
