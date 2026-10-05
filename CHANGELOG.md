@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.12.1 (2026-10-05)
+
+* The requirement is `apscheduler>=3.10.2` with no upper bound. The adapter
+  checks the scheduler object it is given and refuses, by name, one without
+  the APScheduler 3 job interface; APScheduler 4 is a different API, so
+  install `apscheduler<4` beside the adapter.
+
 ## 1.12.0 (2026-10-03)
 
 * Carried with the coordinated fleet release. No behaviour changed.

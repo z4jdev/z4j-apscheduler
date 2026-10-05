@@ -62,6 +62,7 @@ class APSchedulerAdapter:
         engine: str = "apscheduler",
         project_id: UUID | None = None,
     ) -> None:
+        _require_supported_scheduler(scheduler)
         self.scheduler = scheduler
         self._engine = engine
         self._project_id = project_id or uuid4()
@@ -452,6 +453,42 @@ class APSchedulerAdapter:
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+
+#: The scheduler surface this adapter drives. Every APScheduler 3 scheduler
+#: (``BackgroundScheduler``, ``AsyncIOScheduler``, ``BlockingScheduler``) has it.
+_REQUIRED_SCHEDULER_SURFACE = (
+    "get_jobs",
+    "get_job",
+    "pause_job",
+    "resume_job",
+    "remove_job",
+    "modify_job",
+)
+
+
+def _require_supported_scheduler(scheduler: Any) -> None:
+    """Refuse, by name, a scheduler object this adapter cannot drive.
+
+    The package declares no upper bound on APScheduler, so an installer may
+    resolve a major whose scheduler is a different API. Without this check
+    the first listing would fail on a missing attribute far from the cause;
+    with it the adapter says at construction what it needs and what to do.
+    The check is on the surface, not on a version string, so a compatible
+    scheduler from any release is accepted.
+    """
+    missing = [
+        name for name in _REQUIRED_SCHEDULER_SURFACE if not callable(getattr(scheduler, name, None))
+    ]
+    if not missing:
+        return
+    kind = f"{type(scheduler).__module__}.{type(scheduler).__qualname__}"
+    raise TypeError(
+        "z4j-apscheduler drives the APScheduler 3 scheduler interface "
+        f"({', '.join(_REQUIRED_SCHEDULER_SURFACE)}); {kind} lacks "
+        f"{', '.join(missing)}. APScheduler 4 is a different API that this "
+        'adapter does not support: install "apscheduler<4" alongside it.',
+    )
 
 
 def _missing_job_exception() -> tuple[type[BaseException], ...]:

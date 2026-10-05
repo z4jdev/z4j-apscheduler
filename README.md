@@ -13,7 +13,7 @@ scheduler in projects without a queue engine.
 
 ## Compatibility
 
-- APScheduler 3.10.2+ and <4 (capped below the APScheduler 4.x rewrite)
+- APScheduler 3.10.2+ (no upper bound is declared; APScheduler 4 is a different API and the adapter refuses its scheduler by name, so install `apscheduler<4` alongside it)
 - Python 3.11+
 
 Full per-adapter matrix at <https://docs.z4j.com/reference/compatibility/>.

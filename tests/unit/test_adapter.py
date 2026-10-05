@@ -457,3 +457,37 @@ class TestApsWireHardeningR6:
         assert (job.metadata or {}).get("z4j_mapping") == "degraded_args"
         # Strict JSON (allow_nan=False) accepts the degraded value (no NaN/Inf).
         json.dumps(job.model_dump(mode="json"), allow_nan=False)
+
+
+class TestSchedulerSurface:
+    """The adapter names a scheduler it cannot drive at construction."""
+
+    def test_a_scheduler_without_the_job_interface_is_refused_by_name(self) -> None:
+        class _OtherApi:
+            def get_schedules(self) -> list[object]:
+                return []
+
+        with pytest.raises(TypeError) as refused:
+            APSchedulerAdapter(scheduler=_OtherApi())
+        message = str(refused.value)
+        assert "get_jobs" in message
+        assert "_OtherApi lacks" in message
+        assert 'install "apscheduler<4"' in message
+
+    def test_a_partial_interface_names_only_what_is_missing(self) -> None:
+        class _Partial:
+            def get_jobs(self) -> list[object]:
+                return []
+
+            def get_job(self, job_id: str) -> None:
+                return None
+
+        with pytest.raises(TypeError) as refused:
+            APSchedulerAdapter(scheduler=_Partial())
+        assert "lacks pause_job, resume_job, remove_job, modify_job" in str(refused.value)
+
+    def test_a_real_scheduler_is_accepted(self) -> None:
+        from apscheduler.schedulers.background import BackgroundScheduler
+
+        adapter = APSchedulerAdapter(scheduler=BackgroundScheduler())
+        assert adapter.name
